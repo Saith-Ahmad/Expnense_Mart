@@ -46,7 +46,7 @@ const SingleBudget = ({ data, refreshData }: ExpenseListProps) => {
       <div className="w-1/5 text-secondary truncate min-w-[80px]">
         {data.category}
       </div>
-      <div className="w-1/5 text-red-700 font-semibold min-w-[80px]">
+      <div className="w-1/5 text-gray-200 font-light min-w-[80px]">
         Rs.{" "}{data.expenseAmount.toFixed(1)}
       </div>
       <div className="w-1/5 text-gray-400 min-w-[80px]">
@@ -73,7 +73,7 @@ const SingleBudget = ({ data, refreshData }: ExpenseListProps) => {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter className="flex justify-end mt-4 space-x-2">
-                <AlertDialogCancel className="px-4 py-2 my-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                <AlertDialogCancel className="px-4 py-2 my-2 bg-gray-200 rounded-md text-black hover:bg-gray-300">
                   Cancel
                 </AlertDialogCancel>
                 <AlertDialogAction

@@ -20,8 +20,8 @@ function SideNav() {
             className="rounded-full shadow-md shadow-secondary"
           />
           {user?.fullName && (
-            <p className="px-2 py-1 mt-3 nav_link_name text-gray-300 text-sm">
-              {user?.fullName}
+            <p className="px-2 py-1 mt-3 nav_link_name text-gray-300 text-sm text-center">
+              {user?.fullName.length > 15 ? `${user.fullName.slice(0,15)}...` : `${user?.fullName}`}
             </p>
           )}
         </div>

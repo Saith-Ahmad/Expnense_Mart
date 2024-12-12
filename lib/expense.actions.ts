@@ -9,44 +9,53 @@ import { revalidatePath } from "next/cache";
 
 
 export async function createExpense(
-    id: string,
-    name: string,
-    amount: number,
-    category: string,
-    path: string,
-    budgetAmount: number,
-    totalExpenses: number
+  id: string,
+  name: string,
+  amount: number,
+  category: string,
+  path: string,
+  budgetAmount: number,
+  totalExpenses: number
 ) {
-    if (budgetAmount > 0) {
-        const remaining_balance = budgetAmount - totalExpenses;
-        if (amount > remaining_balance) {
-            throw new Error(
-                `Expense exceeds the budget! Remaining balance is ${remaining_balance}, but you tried to add ${amount}.`
-            );
-        }
+  if (budgetAmount > 0) {
+    const remaining_balance = budgetAmount - totalExpenses;
+    if (amount > remaining_balance) {
+      // Custom error message
+      throw new Error(
+        `Expense exceeds the budget! Remaining balance is Rs ${remaining_balance.toLocaleString()}, but you tried to add Rs ${amount.toLocaleString()}.`
+      );
     }
+  }
 
-    try {
-        const result = await db
-            .insert(Expenses)
-            .values({
-                name: name,
-                amount: amount,
-                category: category,
-                budgetId: id,
-            })
-            .returning({ Expense: Expenses.id });
+  try {
+    const result = await db
+      .insert(Expenses)
+      .values({
+        name: name,
+        amount: amount,
+        category: category,
+        budgetId: id,
+      })
+      .returning({ Expense: Expenses.id });
 
-        if (result) {
-            revalidatePath(path); // Trigger revalidation for the path
-            return { success: true, message: result };
-        } else {
-            return { success: false, message: "Failed to add expense" };
-        }
-    } catch (error: any) {
-        console.error("Error creating expense", error.message);
-        return { success: false, message: error.message };
+    if (result) {
+      revalidatePath(path); // Trigger revalidation for the path
+      return { success: true, message: "Expense added successfully!" };
+    } else {
+      return { success: false, message: "Failed to add expense. Please try again later." };
     }
+  } catch (error: any) {
+    console.error("Error creating expense:", error.message);
+
+    // Send sanitized error message
+    return {
+      success: false,
+      message:
+        process.env.NODE_ENV === "production"
+          ? "Failed to add expense due to a server error. Please try again later."
+          : error.message,
+    };
+  }
 }
 
 

@@ -45,7 +45,6 @@ function AddExpense({ id, refreshData, budgetAmount, totalExpenses }: CreateExpe
       }
     } catch (error: any) {
       toast.error(`Failed to add expense. ${error.message}`);
-      console.log("Error adding expense:", error.message);
     } finally {
       setLoading(false);
     }
